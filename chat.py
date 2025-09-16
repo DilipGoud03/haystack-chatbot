@@ -22,7 +22,8 @@ def search_query(query: str):
                 Answer:
                 """
             )
-        ]
+        ],
+        required_variables="*"
     )
 
     # LLM (local HuggingFace model)
