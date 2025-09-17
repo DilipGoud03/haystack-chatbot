@@ -21,7 +21,7 @@ def upload_data():
     file_paths = ["data" / Path(name) for name in os.listdir("data")]
     document_embedder = _model_service._docmument_embedder
     document_writer = DocumentWriter(document_store=_model_service.chroma_store(), policy=DuplicatePolicy.OVERWRITE)
-    document_splitter = DocumentSplitter(split_by="period", split_length=2)
+    document_splitter = DocumentSplitter(split_by="word", split_length=150, split_overlap=50)
     document_cleaner = DocumentCleaner()
     text_converter = TextFileToDocument()
     csv_converter = CSVToDocument()
