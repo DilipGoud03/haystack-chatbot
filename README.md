@@ -45,11 +45,11 @@ pip install -r requirement.txt
 ### Process to run this code 
 
 - first open project directory  and upload any text or doc file into data directory
-- after uploading text file run
+- after uploading file run
 ```
 python file_uploader.py
 ```
-- above command upload your data into vector db as chroma
+- above command upload your data into vector db (ie- chroma db)
 - Now setup is completed simply run below file
 ```
 python chat.py
