@@ -31,7 +31,7 @@ class RagSearcher:
 rag_tool = ComponentTool(
     component=RagSearcher(),
     name="rag_search",
-    description="Semantic search over the Islamabad knowledge base."
+    description="Semantic search over the documents knowledge base."
 )
 
 
