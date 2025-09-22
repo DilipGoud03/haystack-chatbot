@@ -16,8 +16,8 @@ class ModelService:
             persist_path='vectore_db/chroma_db'
         )
     
-    def chroma_retriever(self):
-        return ChromaEmbeddingRetriever(document_store=self.chroma_store())
+    def chroma_retriever(self, top_k: int = 3):
+        return ChromaEmbeddingRetriever(document_store=self.chroma_store(), top_k=top_k)
     
     def get_all(self):
         store = self.chroma_store()

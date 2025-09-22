@@ -32,11 +32,9 @@ def upload_data():
 
     indexing_pipeline = Pipeline()
     indexing_pipeline.add_component('file_type_router', file_type_router)
-    
     indexing_pipeline.add_component('text_converter', text_converter)
     indexing_pipeline.add_component('csv_converter', csv_converter)
     indexing_pipeline.add_component('pdf_converter', pdf_converter)
-    
     indexing_pipeline.add_component('joiner', joiner)
     indexing_pipeline.add_component("cleaner", document_cleaner)
     indexing_pipeline.add_component("splitter", document_splitter)
@@ -47,17 +45,17 @@ def upload_data():
     indexing_pipeline.connect('file_type_router.text/plain', 'text_converter.sources')
     indexing_pipeline.connect('file_type_router.application/pdf', 'pdf_converter.sources')
     indexing_pipeline.connect('file_type_router.text/csv', 'csv_converter.sources')
-
     indexing_pipeline.connect('text_converter', 'joiner')
     indexing_pipeline.connect('pdf_converter', 'joiner')
     indexing_pipeline.connect('csv_converter', 'joiner')
-    
     indexing_pipeline.connect('joiner', 'cleaner')
     indexing_pipeline.connect("cleaner", "splitter")
     indexing_pipeline.connect("splitter", "embedder")
     indexing_pipeline.connect("embedder", "writer")
-
-    indexing_pipeline.draw(path = f'{output_directory}/file_uploader.png') #type:ignore
+    try:
+        indexing_pipeline.draw(path=f'{output_directory}/file_uploader.png')  # type: ignore
+    except Exception as e:
+        print(f"Warning: Failed to generate pipeline diagram: {e}")
     indexing_pipeline.run({'file_type_router': {'sources': file_paths}})
 
 if __name__ == '__main__':

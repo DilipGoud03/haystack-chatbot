@@ -1,11 +1,12 @@
 from haystack import Pipeline
+from pathlib import Path
 from haystack.dataclasses import ChatMessage
 from haystack.components.builders import ChatPromptBuilder
 from models import ModelService
+model_service = ModelService()
 
 
 def search_query(query: str):
-    _model = ModelService()
     prompt_builder = ChatPromptBuilder(
         template=[
             ChatMessage.from_user(
@@ -27,11 +28,11 @@ def search_query(query: str):
     )
 
     # LLM (local HuggingFace model)
-    llm = _model._llm
+    llm = model_service._llm
     llm.warm_up()
 
-    retriever = _model.chroma_retriever()
-    embedder = _model._text_embedder
+    retriever = model_service.chroma_retriever()
+    embedder = model_service._text_embedder
 
     # Build pipeline
     querying = Pipeline()
@@ -45,8 +46,17 @@ def search_query(query: str):
     querying.connect("retriever.documents", "prompt_builder.documents")
     querying.connect("prompt_builder.prompt", "llm.messages")
 
-    querying.draw(path='png/query.png')  # type:ignore
-    result = querying.run({"embedder": {"text": query}, "prompt_builder": {"query": query}})
+    querying.draw(path='png' / Path('query.png'))
+    result = querying.run(
+        {
+            "embedder": {
+                "text": query
+            },
+            "prompt_builder": {
+                "query": query
+            }
+        }
+    )
 
     return result
 
@@ -54,7 +64,7 @@ def search_query(query: str):
 if __name__ == '__main__':
     while True:
         print('--'*50)
-        question = input('Enter your query (or exit to quite) :')
+        question = input('Enter your query (or exit to quit) :')
         print('--'*50, '\n')
         if question.lower() == 'exit':
             break
