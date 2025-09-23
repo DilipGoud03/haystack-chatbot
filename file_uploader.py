@@ -8,27 +8,24 @@ from haystack.document_stores.types import DuplicatePolicy
 from haystack.components.routers import FileTypeRouter
 from haystack.components.joiners import DocumentJoiner
 from utility import UtilityService
-import os   
 
-
-output_directory = 'png'
-os.makedirs(output_directory, exist_ok=True)
 
 utility_service = UtilityService()
-
-
 def upload_data():
-    file_paths = ["data" / Path(name) for name in os.listdir("data")]
+
+    file_paths = ["documents" / Path(name) for name in os.listdir("documents")]
     document_embedder = utility_service._docmument_embedder
-    document_writer = DocumentWriter(document_store=utility_service.chroma_store(), policy=DuplicatePolicy.OVERWRITE)
-    document_splitter = DocumentSplitter(split_by="word", split_length=150, split_overlap=50)
+    document_writer = DocumentWriter(
+        document_store=utility_service.chroma_store(), policy=DuplicatePolicy.OVERWRITE)
+    document_splitter = DocumentSplitter(
+        split_by="word", split_length=150, split_overlap=50)
     document_cleaner = DocumentCleaner()
     text_converter = TextFileToDocument()
     csv_converter = CSVToDocument()
     joiner = DocumentJoiner()
     pdf_converter = PyPDFToDocument()
-    file_type_router = FileTypeRouter(mime_types=["text/plain", "application/pdf", "text/csv"])
-    
+    file_type_router = FileTypeRouter(
+        mime_types=["text/plain", "application/pdf", "text/csv"])
 
     indexing_pipeline = Pipeline()
     indexing_pipeline.add_component('file_type_router', file_type_router)
@@ -41,10 +38,12 @@ def upload_data():
     indexing_pipeline.add_component("embedder", document_embedder)
     indexing_pipeline.add_component("writer", document_writer)
 
-
-    indexing_pipeline.connect('file_type_router.text/plain', 'text_converter.sources')
-    indexing_pipeline.connect('file_type_router.application/pdf', 'pdf_converter.sources')
-    indexing_pipeline.connect('file_type_router.text/csv', 'csv_converter.sources')
+    indexing_pipeline.connect(
+        'file_type_router.text/plain', 'text_converter.sources')
+    indexing_pipeline.connect(
+        'file_type_router.application/pdf', 'pdf_converter.sources')
+    indexing_pipeline.connect(
+        'file_type_router.text/csv', 'csv_converter.sources')
     indexing_pipeline.connect('text_converter', 'joiner')
     indexing_pipeline.connect('pdf_converter', 'joiner')
     indexing_pipeline.connect('csv_converter', 'joiner')
@@ -53,11 +52,11 @@ def upload_data():
     indexing_pipeline.connect("splitter", "embedder")
     indexing_pipeline.connect("embedder", "writer")
     try:
-        indexing_pipeline.draw(path=f'{output_directory}/file_uploader.png')  # type: ignore
+        indexing_pipeline.draw(path='data' / Path('file_uploader.png'))
     except Exception as e:
         print(f"Warning: Failed to generate pipeline diagram: {e}")
     indexing_pipeline.run({'file_type_router': {'sources': file_paths}})
 
+
 if __name__ == '__main__':
     upload_data()
-

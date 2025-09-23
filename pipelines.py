@@ -63,7 +63,7 @@ def search_from_document(query: str):
     querying.connect("component.documents", "prompt_builder.documents")
     querying.connect("prompt_builder.prompt", "llm.messages")
 
-    # querying.draw(path='png' / Path('query.png'))
+    querying.draw(path='png' / Path('query.png'))
     print(querying.inputs())
     result = querying.run(
         {

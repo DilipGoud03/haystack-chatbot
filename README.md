@@ -8,7 +8,6 @@ This repository contains the implementation of a chatbot powered by [Haystack](h
 - **Question Answering**: Extract precise answers from documents or knowledge bases.
 - **Conversational AI**: Engage in multi-turn conversations with context awareness.
 - **Extensible Pipelines**: Easily add or modify components (retrievers, readers, etc.) in the Haystack pipeline.
-- **Integration Ready**: Designed for easy integration with messaging platforms and web interfaces.
 
 ## Getting Started
 

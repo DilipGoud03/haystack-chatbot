@@ -6,7 +6,7 @@ from haystack.components.websearch import SerperDevWebSearch
 import os
 from haystack.components.agents import Agent
 from haystack.dataclasses import ChatMessage, Document
-from pipelines import UtilityService, search_pipeline  # Fixed import
+from pipelines import UtilityService, RagSearcher  # Fixed import
 
 utility_service = UtilityService()
 
@@ -14,20 +14,6 @@ SERPER_DEV_API_KEY = ''
 
 if 'SERPERDEV_API_KEY' not in os.environ and SERPER_DEV_API_KEY:
     os.environ['SERPERDEV_API_KEY'] = SERPER_DEV_API_KEY
-
-
-@component()
-class RagSearcher:
-    def __init__(self, top_k: int = 3):
-        self.text_embedder = utility_service._text_embedder
-        self.text_embedder.warm_up()
-        self.retriever = utility_service.chroma_retriever(top_k=top_k)
-
-    @component.output_types(documents=List[Document])
-    def run(self, text: str) -> Dict[str, Any]:
-        emb_out = self.text_embedder.run(text=text)
-        docs_out = self.retriever.run(query_embedding=emb_out["embedding"])
-        return {"documents": docs_out["documents"]}
 
 
 rag_tool = ComponentTool(
@@ -67,7 +53,6 @@ def search_by_agent(query: str):
 
 def tools_used(run_output: dict) -> list[str]:
     seen, ordered = set(), []
-
     for msg in run_output["messages"]:
         for call in msg.tool_calls:
             if call.tool_name not in seen:
