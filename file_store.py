@@ -7,20 +7,20 @@ from haystack.components.writers import DocumentWriter
 from haystack.document_stores.types import DuplicatePolicy
 from haystack.components.routers import FileTypeRouter
 from haystack.components.joiners import DocumentJoiner
-from models import ModelService
+from utility import UtilityService
 import os   
 
 
 output_directory = 'png'
 os.makedirs(output_directory, exist_ok=True)
 
-_model_service = ModelService()
+utility_service = UtilityService()
 
 
 def upload_data():
     file_paths = ["data" / Path(name) for name in os.listdir("data")]
-    document_embedder = _model_service._docmument_embedder
-    document_writer = DocumentWriter(document_store=_model_service.chroma_store(), policy=DuplicatePolicy.OVERWRITE)
+    document_embedder = utility_service._docmument_embedder
+    document_writer = DocumentWriter(document_store=utility_service.chroma_store(), policy=DuplicatePolicy.OVERWRITE)
     document_splitter = DocumentSplitter(split_by="word", split_length=150, split_overlap=50)
     document_cleaner = DocumentCleaner()
     text_converter = TextFileToDocument()

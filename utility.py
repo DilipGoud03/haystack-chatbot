@@ -4,7 +4,7 @@ from haystack.components.generators.chat import HuggingFaceLocalChatGenerator
 from haystack.components.embedders import SentenceTransformersDocumentEmbedder, SentenceTransformersTextEmbedder
 
 
-class ModelService:
+class UtilityService:
     def __init__(self) -> None:
         self._llm = HuggingFaceLocalChatGenerator(model="Qwen/Qwen2.5-1.5B-Instruct", generation_kwargs={"max_new_tokens": 150})
         self._docmument_embedder = SentenceTransformersDocumentEmbedder(model="sentence-transformers/all-MiniLM-L6-v2")
