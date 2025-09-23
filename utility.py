@@ -13,7 +13,7 @@ class UtilityService:
     def chroma_store(self):
         return ChromaDocumentStore(
             collection_name="local_collection",
-            persist_path='vectore_db/chroma_db'
+            persist_path='vector_db/chroma_db'
         )
     
     def chroma_retriever(self, top_k: int = 3):
