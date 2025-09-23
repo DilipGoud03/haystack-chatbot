@@ -9,7 +9,7 @@ from models import ModelService
 
 model_service = ModelService()
 
-SERPER_DEV_API_KEY = '7e9904514ecd65ad4c54c96940729f87eecc65d7'
+SERPER_DEV_API_KEY = ''
 
 if 'SERPERDEV_API_KEY' not in os.environ:
     os.environ['SERPERDEV_API_KEY'] = SERPER_DEV_API_KEY
@@ -31,7 +31,7 @@ class RagSearcher:
 rag_tool = ComponentTool(
     component=RagSearcher(),
     name="rag_search",
-    description="Semantic search over the documents knowledge base."
+    description="Searches the local knowledge base using semantic embeddings to find relevant documents."
 )
 
 
