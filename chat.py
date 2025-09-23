@@ -1,4 +1,4 @@
-from pipelines import search_query
+from pipelines import search_from_document
 
 if __name__ == '__main__':
     while True:
@@ -7,7 +7,7 @@ if __name__ == '__main__':
         print('--'*50, '\n')
         if question.lower() == 'exit':
             break
-        result = search_query(question)
+        result = search_from_document(question)
         print('\n', '--'*50)
         print('Answer :', result["llm"]["replies"][0].text)
         print('--'*50, '\n')

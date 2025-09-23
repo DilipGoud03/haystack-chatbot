@@ -7,7 +7,7 @@ from utility import UtilityService
 utility_service = UtilityService()
 
 
-def search_query(query: str):
+def search_from_document(query: str):
     prompt_builder = ChatPromptBuilder(
         template=[
             ChatMessage.from_user(
