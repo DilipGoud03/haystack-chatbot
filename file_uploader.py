@@ -52,7 +52,7 @@ def upload_data():
     indexing_pipeline.connect("splitter", "embedder")
     indexing_pipeline.connect("embedder", "writer")
     try:
-        indexing_pipeline.draw(path='data' / Path('file_uploader.png'))
+        indexing_pipeline.draw(path='png' / Path('file_uploader.png'))
     except Exception as e:
         print(f"Warning: Failed to generate pipeline diagram: {e}")
     indexing_pipeline.run({'file_type_router': {'sources': file_paths}})
