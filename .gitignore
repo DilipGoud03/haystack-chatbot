@@ -1,5 +1,5 @@
 myvenv
-data/*
-vectore_db
+documents/*
+vector_db/*
 */__pycache__
 **/__pycache__
