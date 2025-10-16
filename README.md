@@ -50,7 +50,7 @@ pip install -r requirement.txt
 python file_uploader.py
 ```
 - above command upload your data into vector db (ie- chroma db)
-- Now setup is completed simply run below file
+- Now setup is completed simply run below command to run the project
 ```
 python chat.py
 ```
