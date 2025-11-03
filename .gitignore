@@ -1,4 +1,5 @@
-myvenv
+png/*
+haystack-chat-venv
 documents/*
 vector_db/*
 */__pycache__
