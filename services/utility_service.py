@@ -22,7 +22,8 @@ class UtilityService:
         load_dotenv()
 
         os.makedirs(str(config('DOC_DIR')), exist_ok=True)
-        os.makedirs(str(config("PNG_DIR")))
+        os.makedirs(str(config("PNG_DIR")), exist_ok=True)
+
         # Initialize Local LLM for conversational generation
         # Model: gemini-2.5-flash
         self._llm = GoogleGenAIChatGenerator(
