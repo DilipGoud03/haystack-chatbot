@@ -1,6 +1,6 @@
 png/*
-haystack-chat-venv
+haystack-chatbot-venv
 documents/*
-vector_db/*
 */__pycache__
 **/__pycache__
+.env

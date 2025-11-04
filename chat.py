@@ -2,71 +2,58 @@ from haystack import Pipeline
 from pathlib import Path
 from haystack.dataclasses import ChatMessage
 from haystack.components.builders import ChatPromptBuilder
-from utility import UtilityService
-
+from services.utility_service import UtilityService
+from decouple import config
 
 # Initialize: Utility service instance for LLM and retriever setup
 utility_service = UtilityService()
 
-
-# Function: search_from_document
 # ------------------------------
 # Executes a retrieval-augmented query pipeline using Haystack.
 # The function retrieves relevant documents, constructs a context-aware prompt,
 # and generates a natural-language answer using the LLM.
-def search_from_document(query: str):
-    # Step 1: Build contextual prompt for the LLM
-    prompt_builder = ChatPromptBuilder(
-        template=[
-            ChatMessage.from_user(
-                """
-                Answer the query based on the provided context.
-                Also, ensure the answer is human-readable.
+# ------------------------------
 
-                Context:
-                {% for doc in documents %}
-                {{ doc.content }}
-                {% endfor %}
+# Step 1: Build contextual prompt for the LLM
+prompt_builder = ChatPromptBuilder(
+    template=[
+        ChatMessage.from_user(
+            """
+            You are an intelligent AI assistant. Answer the query based on the provided context.
+            Also, ensure the answer is human-readable.
 
-                Query: {{query}}
-                Answer:
-                """
-            )
-        ],
-        required_variables="*"
-    )
+            Context:
+            {% for doc in documents %}
+            {{ doc.content }}
+            {% endfor %}
 
-    # Step 2: Initialize model and retriever components
-    llm = utility_service._llm
-    llm.warm_up()
-    retriever = utility_service.chroma_retriever()
-    embedder = utility_service._text_embedder
+            Query: {{query}}
+            Answer:
+            """
+        )
+    ],
+    required_variables="*"
+)
 
-    # Step 3: Construct the pipeline graph
-    querying = Pipeline()
-    querying.add_component("embedder", embedder)
-    querying.add_component("retriever", retriever)
-    querying.add_component("prompt_builder", prompt_builder)
-    querying.add_component("llm", llm)
+# Step 2: Initialize model and retriever components
+llm = utility_service._llm
+retriever = utility_service.weaviate_retriever()
+embedder = utility_service._text_embedder
 
-    # Step 4: Connect data flow between components
-    querying.connect("embedder.embedding", "retriever.query_embedding")
-    querying.connect("retriever.documents", "prompt_builder.documents")
-    querying.connect("prompt_builder.prompt", "llm.messages")
+# Step 3: Construct the pipeline graph
+querying = Pipeline()
+querying.add_component("embedder", embedder)
+querying.add_component("retriever", retriever)
+querying.add_component("prompt_builder", prompt_builder)
+querying.add_component("llm", llm)
 
-    # Step 5: Generate and save pipeline visualization
-    Path("png").mkdir(exist_ok=True)
-    querying.draw(path=Path("png/query.png"))
+# Step 4: Connect data flow between components
+querying.connect("embedder.embedding", "retriever.query_embedding")
+querying.connect("retriever.documents", "prompt_builder.documents")
+querying.connect("prompt_builder.prompt", "llm.messages")
 
-    # Step 6: Execute query through the pipeline
-    result = querying.run(
-        {
-            "embedder": {"text": query},
-            "prompt_builder": {"query": query}
-        }
-    )
-
-    return result
+# Step 5: Generate and save pipeline visualization
+querying.draw(path=Path(f"{str(config('PNG_DIR'))}/query.png"))
 
 
 # Entry Point: CLI interactive mode
@@ -81,7 +68,13 @@ if __name__ == '__main__':
         if question.lower() == 'exit':
             break
 
-        result = search_from_document(question)
+        result = querying.run(
+            {
+                "embedder": {"text": question},
+                "prompt_builder": {"query": question}
+            }
+        )
+
         print('\n', '--' * 50)
         print('Answer:', result["llm"]["replies"][0].text)
         print('--' * 50, '\n')

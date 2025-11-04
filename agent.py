@@ -1,8 +1,8 @@
 from haystack.dataclasses import ChatMessage
 from haystack.components.agents import Agent
-from rag_search_tool import rag_tool
-from web_search_tool import web_tool
-from utility import UtilityService
+from tools.rag_search_tool import rag_tool
+from tools.web_search_tool import web_tool
+from services.utility_service import UtilityService
 from haystack.components.generators.utils import print_streaming_chunk
 
 

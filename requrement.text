@@ -1,10 +1,9 @@
 haystack-ai
-chroma-haystack
 datasets>=2.6.1
-sentence-transformers>=4.1.0
-huggingface_hub>=0.23.0
 pypdf
 duckduckgo-search
-google-ai-haystack
+weaviate-haystack
 google-genai-haystack
 ddgs
+python-dotenv
+python-decouple

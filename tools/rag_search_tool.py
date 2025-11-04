@@ -2,7 +2,7 @@ from haystack.tools import ComponentTool
 from haystack import component
 from typing import List, Dict, Any
 from haystack.dataclasses import Document
-from utility import UtilityService
+from services.utility_service import UtilityService
 
 
 # Initialize Utility Service
