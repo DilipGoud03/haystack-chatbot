@@ -6,6 +6,8 @@ from haystack_integrations.components.embedders.google_genai import GoogleGenAIT
 from dotenv import load_dotenv
 import os
 from decouple import config
+
+
 # Class: UtilityService
 # ---------------------
 # Centralized service providing access to core AI components:

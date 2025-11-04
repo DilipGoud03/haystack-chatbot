@@ -14,22 +14,22 @@ utility_service = UtilityService()
 # Class: RagSearcher
 # ------------------
 # Custom Haystack component that performs semantic retrieval (RAG Search)
-# using Chroma vector storage and an embedding model.
+# using Weaviate vector storage and an embedding model.
 #
 # Workflow:
 #   1. Encodes the input query using the text embedding model.
-#   2. Searches the Chroma vector store for semantically similar documents.
+#   2. Searches the Weaviate vector store for semantically similar documents.
 #   3. Returns the top matching documents for further reasoning or summarization.
 @component()
 class RagSearcher:
     def __init__(self):
         # Initialize the text embedder and retriever
         self.text_embedder = utility_service._text_embedder
-        self.retriever = utility_service.chroma_retriever(top_k=3)
+        self.retriever = utility_service.weaviate_retriever(top_k=3)
 
     # Method: run
     # -----------
-    # Executes the semantic search over the Chroma document store.
+    # Executes the semantic search over the Weaviate document store.
     #
     # Parameters:
     #   text (str): The input query or sentence to search for.
