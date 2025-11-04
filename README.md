@@ -10,6 +10,12 @@ This repository contains the implementation of a chatbot powered by [Haystack](h
 - **Extensible Pipelines**: Easily add or modify components (retrievers, readers, etc.) in the Haystack pipeline.
 - **Integration Ready**: Designed for easy integration with messaging platforms and web interfaces.
 
+## Technologies
+
+- **Haystack Framework**
+- **Google-Gemini-Chat-Model And Google-Gemini-Embbeding-Model**
+- **Weaviate Vector Database**
+
 ## Getting Started
 
 ### Prerequisites
@@ -29,12 +35,12 @@ cd haystack-chatbot
 
 - create vertual enviorment
 ```
-python -m venv myVenv
+python -m venv haystack-chatbot-venv
 ```
 
 - Activate vertual enviorment
 ```
-source myVenv/bin/activate
+source haystack-chatbot-venv/bin/activate
 ```
 
 ### Install dependencies
@@ -43,13 +49,21 @@ pip install -r requirement.txt
 ```
 
 ### Process to run this code 
+```
+docker compose up -d
+```
+- Above comand setup a weaviate db as localy.
+- Then open project directory and upload any text or doc file into documents directory
+- if documents directory not available run below command.
+```
+mkdir documets
 
-- first open project directory  and upload any text or doc file into data directory
+```
 - after uploading file run
 ```
-python file_uploader.py
+python services/file_upload_service.py
 ```
-- above command upload your data into vector db (ie- chroma db)
+- above command upload your data into vector db (ie- weaviate db)
 - Now setup is completed simply run below command to run the project
 ```
 python chat.py
